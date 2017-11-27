@@ -15,8 +15,10 @@ import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.WindowManager;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.sun.glass.ui.Window;
 import com.twilio.voice.CallInvite;
 
 import java.util.List;
@@ -166,11 +168,18 @@ public class CallNotificationManager {
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingAnswerIntent = PendingIntent.getBroadcast(context, 0, answerIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationBuilder.addAction(R.drawable.ic_call_white_24dp, "ANSWER", pendingAnswerIntent);
+        notificationBuilder.addAction(R.drawable.ic_call_white_24dp, "ANSWER   ", pendingAnswerIntent);
 
         android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(notificationId, notificationBuilder.build());
         TwilioVoiceModule.callNotificationMap.put(INCOMING_NOTIFICATION_PREFIX+callInvite.getCallSid(), notificationId);
+    }
+
+    private void sendCallInviteToActivity(CallInvite callInvite, int notificationId, ReactApplicationContext context) {
+        Intent intent = new Intent(ACTION_INCOMING_CALL);
+        intent.putExtra(INCOMING_CALL_NOTIFICATION_ID, notificationId);
+        intent.putExtra(INCOMING_CALL_INVITE, callInvite);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     public void createMissedCallNotification(ReactApplicationContext context, CallInvite callInvite) {

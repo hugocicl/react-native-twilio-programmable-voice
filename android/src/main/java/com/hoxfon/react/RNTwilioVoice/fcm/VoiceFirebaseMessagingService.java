@@ -155,7 +155,6 @@ public class VoiceFirebaseMessagingService extends FirebaseMessagingService {
     /*
      * Show the notification in the Android notification drawer
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     private void showNotification(ReactApplicationContext context,
                                   CallInvite callInvite,
                                   int notificationId,
