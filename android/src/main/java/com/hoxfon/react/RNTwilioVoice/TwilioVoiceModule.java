@@ -156,11 +156,13 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         /*
          * Ensure the microphone permission is enabled
          */
-      /*  if (!checkPermissionForMicrophone()) {
+        /*  
+        if (!checkPermissionForMicrophone()) {
             requestPermissionForMicrophone();
-        } else {*/
-          //  registerForCallInvites();
-      //  }
+        } else {
+            registerForCallInvites();
+        }
+        */
 
     }
 
@@ -299,13 +301,6 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         }
     }
 
-//    private void unregisterReceiver() {
-//        if (isReceiverRegistered) {
-//            LocalBroadcastManager.getInstance(getReactApplicationContext()).unregisterReceiver(voiceBroadcastReceiver);
-//            isReceiverRegistered = false;
-//        }
-//    }
-
     private void registerActionReceiver() {
 
         IntentFilter intentFilter = new IntentFilter();
@@ -326,8 +321,6 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                         reject();
                         break;
                     case ACTION_HANGUP_CALL:
-                    Toast toast = Toast.makeText(getReactApplicationContext() , "HANG UP",  Toast.LENGTH_SHORT);
-                    toast.show();
                         disconnect();
                         break;
                     case ACTION_CLEAR_MISSED_CALLS_COUNT:
@@ -435,9 +428,6 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                     if (BuildConfig.DEBUG) {
                         Log.d(TAG, "====> BEGIN handleIncomingCallIntent when activeCallInvite != PENDING");
                     }
-                    // this block is executed when the callInvite is cancelled and:
-                    //   - the call is answered (activeCall != null)
-                    //   - the call is rejected
 
                     if (wakeLock.isHeld()) {
                         wakeLock.release();
@@ -501,8 +491,6 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "VoiceBroadcastReceiver.onReceive ACTION_INCOMING_CALL. Intent "+ intent.getExtras());
                 }
-                Toast toast = Toast.makeText(getReactApplicationContext() , "VoiceBroadcastReceiver.onReceive ACTION_INCOMING_CALL",  Toast.LENGTH_SHORT);
-                toast.show();
                 handleIncomingCallIntent(intent);
             } else if (action.equals(ACTION_MISSED_CALL)) {
                 SharedPreferences sharedPref = getReactApplicationContext().getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE);
@@ -755,36 +743,5 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
             }
         }
     }
-/*
-    private boolean checkPermissionForMicrophone() {
-        int resultMic = ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        return resultMic == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermissionForMicrophone() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(), Manifest.permission.RECORD_AUDIO)) {
-            Toast toast = Toast.makeText(getReactApplicationContext() , "Microphone permissions needed. Please allow in your application settings.",  Toast.LENGTH_SHORT);
-            toast.show();
-        } else {
-            ActivityCompat.requestPermissions(
-                getCurrentActivity(),
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    MIC_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        /*
-         * Check if microphone permissions is granted
-         */
-   /*     if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast toast = Toast.makeText(getReactApplicationContext() , "Microphone permissions needed. Please allow in your application settings.",  Toast.LENGTH_SHORT);
-                toast.show();
-            } else {
-                registerForCallInvites();
-            }
-        }
-}*/
     
 }
