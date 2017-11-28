@@ -615,9 +615,6 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "connect params: "+params);
         }
-            
-        Toast toast = Toast.makeText(getReactApplicationContext() , accessToken , Toast.LENGTH_SHORT);
-        toast.show();
 
         WritableMap errParams = Arguments.createMap();
         if (accessToken == null) {
